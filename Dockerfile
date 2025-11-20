@@ -5,7 +5,7 @@ WORKDIR /app
 RUN apk update && apk upgrade
 
 # Copy package files
-COPY package.json bun.lockb ./
+COPY package.json bun.lock ./
 
 # Install ALL dependencies (including dev) for building
 RUN bun install --frozen-lockfile
