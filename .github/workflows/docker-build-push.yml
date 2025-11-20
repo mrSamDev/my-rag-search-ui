@@ -3,8 +3,6 @@ name: Build & push Docker image
 on:
   push:
     branches: ["main"]
-    tags:
-      - "v*.*.*"
 
 jobs:
   build-and-push:
@@ -21,18 +19,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Set image tag from ref
-        id: tag
-        run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-            echo "tag=${TAG}" >> $GITHUB_OUTPUT
-            echo "is_tag=true" >> $GITHUB_OUTPUT
-          else
-            echo "tag=latest" >> $GITHUB_OUTPUT
-            echo "is_tag=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Build & push image
         uses: docker/build-push-action@v4
         with:
@@ -40,6 +26,4 @@ jobs:
           file: ./Dockerfile
           push: true
           platforms: linux/amd64
-          tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/sijo-rag-ui:latest
-            ${{ steps.tag.outputs.is_tag == 'true' && format('{0}/sijo-rag-ui:{1}', secrets.DOCKERHUB_USERNAME, steps.tag.outputs.tag) || '' }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/sijo-rag-ui:latest
