@@ -23,10 +23,18 @@ RUN apk update && apk upgrade --no-cache
 # Create custom nginx config for port 3003
 RUN echo 'server { \
     listen 3003; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    \
     location / { \
-        root /usr/share/nginx/html; \
-        index index.html index.htm; \
         try_files $uri $uri/ /index.html; \
+        add_header Cache-Control "no-cache"; \
+    } \
+    \
+    location /assets { \
+        try_files $uri =404; \
+        expires 1y; \
+        add_header Cache-Control "public"; \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
