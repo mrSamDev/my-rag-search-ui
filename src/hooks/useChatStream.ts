@@ -52,7 +52,7 @@ export function useChatStream(): UseChatStreamReturn {
     abortControllerRef.current = new AbortController();
 
     try {
-      const response = await fetch("https://rag-app-akhcae-83761c-194-238-23-211.traefik.me/api/withTextStream", {
+      const response = await fetch("https://whomai-api.mrsamdev.xyz/api/withTextStream", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
